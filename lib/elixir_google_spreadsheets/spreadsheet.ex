@@ -19,10 +19,10 @@ defmodule GSS.Spreadsheet do
   @type spreadsheet_data :: [String.t()]
   @type spreadsheet_response :: {:json, map()} | {:error, Exception.t()} | no_return()
   @type grid_range :: %{
-          row_from: integer(),
-          row_to: integer(),
-          col_from: integer(),
-          col_to: integer()
+          row_from: integer() | nil,
+          row_to: integer() | nil,
+          col_from: integer() | nil,
+          col_to: integer() | nil
         }
 
   @api_url_spreadsheet "https://sheets.googleapis.com/v4/spreadsheets/"
