@@ -20,9 +20,7 @@ defmodule GSS.Client.Request do
   Takes events from Limiter and send requests through HTTPoison
 
   ## Options
-  * `:name` - used for name registration as described in the "Name registration" section of the module documentation. Default is `#{
-    __MODULE__
-  }`
+  * `:name` - used for name registration as described in the "Name registration" section of the module documentation. Default is `#{__MODULE__}`
   * `:limiters` - list of limiters with max_demand options. For example `[{#{Client.Limiter}, max_demand: 1}]`.
   """
   @spec start_link(options()) :: GenServer.on_start()

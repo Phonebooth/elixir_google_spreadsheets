@@ -131,7 +131,8 @@ defmodule GSS.Spreadsheet do
   Append row in a spreadsheet after an index.
   """
   @spec append_row(pid, integer(), spreadsheet_data, Keyword.t()) :: :ok
-  def append_row(pid, row_index, [cell | _] = column_list, options \\ []) when is_binary(cell) or is_nil(cell) do
+  def append_row(pid, row_index, [cell | _] = column_list, options \\ [])
+      when is_binary(cell) or is_nil(cell) do
     gen_server_call(pid, {:append_rows, row_index, [column_list], options}, options)
   end
 
@@ -1108,7 +1109,8 @@ defmodule GSS.Spreadsheet do
   @spec get_request_params() :: Keyword.t()
   defp get_request_params do
     params = Client.config(:request_opts, [])
-    Keyword.merge(params, [
+
+    Keyword.merge(params,
       ssl: [
         versions: [:"tlsv1.2"],
         verify: :verify_peer,
@@ -1121,7 +1123,7 @@ defmodule GSS.Spreadsheet do
         crl_check: true,
         crl_cache: {:ssl_crl_cache, {:internal, [http: 30000]}}
       ]
-    ])
+    )
   end
 
   defp gen_server_call(pid, tuple, options) do

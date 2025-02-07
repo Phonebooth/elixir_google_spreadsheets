@@ -17,22 +17,24 @@ defmodule GSS.Client.Supervisor do
       {Client, []},
       %{
         id: Limiter.Writer,
-        start: {Limiter, :start_link,
-        [
-          limiter_args
-          |> Keyword.put(:clients, [{Client, partition: :write}])
-          |> Keyword.put(:name, Limiter.Writer)
-        ]}
+        start:
+          {Limiter, :start_link,
+           [
+             limiter_args
+             |> Keyword.put(:clients, [{Client, partition: :write}])
+             |> Keyword.put(:name, Limiter.Writer)
+           ]}
       },
       %{
         id: Limiter.Reader,
-        start: {Limiter, :start_link,
-        [
-          limiter_args
-          |> Keyword.put(:partition, :read)
-          |> Keyword.put(:clients, [{Client, partition: :read}])
-          |> Keyword.put(:name, Limiter.Reader)
-        ]}
+        start:
+          {Limiter, :start_link,
+           [
+             limiter_args
+             |> Keyword.put(:partition, :read)
+             |> Keyword.put(:clients, [{Client, partition: :read}])
+             |> Keyword.put(:name, Limiter.Reader)
+           ]}
       }
     ]
 
@@ -47,6 +49,6 @@ defmodule GSS.Client.Supervisor do
         }
       end
 
-    Supervisor.start_link(children ++ request_workers, [strategy: :one_for_one, name: __MODULE__])
+    Supervisor.start_link(children ++ request_workers, strategy: :one_for_one, name: __MODULE__)
   end
 end

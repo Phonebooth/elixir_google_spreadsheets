@@ -17,10 +17,8 @@ defmodule GSS.Spreadsheet.Supervisor do
 
   @spec spreadsheet(String.t(), Keyword.t()) :: {:ok, pid}
   def spreadsheet(spreadsheet_id, opts \\ []) do
-    with \
-      pid when is_pid(pid) <- GSS.Registry.spreadsheet_pid(spreadsheet_id, opts),
-      true <- Process.alive?(pid)
-    do
+    with pid when is_pid(pid) <- GSS.Registry.spreadsheet_pid(spreadsheet_id, opts),
+         true <- Process.alive?(pid) do
       {:ok, pid}
     else
       _ ->
