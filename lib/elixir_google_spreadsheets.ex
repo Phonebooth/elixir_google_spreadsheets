@@ -6,8 +6,6 @@ defmodule GSS do
   use Application
 
   def start(_type, _args) do
-    IO.inspect(config(:goth_module), label: "GSS: start: config(:goth_module)")
-
     children = [
       {GSS.Registry, [auth_module: config(:goth_module)]},
       {GSS.Spreadsheet.Supervisor, []},

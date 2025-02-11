@@ -24,14 +24,12 @@ defmodule GSS.Registry do
       active_sheets: %{},
       auth_module: args[:auth_module]
     }
-    IO.inspect(initial_state, label: "Registry: start_link: initial_state")
 
     GenServer.start_link(__MODULE__, initial_state, name: __MODULE__)
   end
 
   @spec init(state) :: {:ok, state}
   def init(state) do
-    IO.inspect(state, label: "Registry: state: state")
     {:ok, state}
   end
 
@@ -40,7 +38,6 @@ defmodule GSS.Registry do
   """
   @spec token() :: String.t()
   def token do
-    IO.inspect("Registry: token")
     GenServer.call(__MODULE__, :token)
   end
 
@@ -72,7 +69,6 @@ defmodule GSS.Registry do
           auth_module: auth_module
         } = state
       ) do
-    IO.inspect(state, label: "1. Registry: handle_call token: state")
     if expires < :os.system_time(:seconds) do
       new_state = Map.put(state, :auth, refresh_token(auth_module))
       {:reply, new_state.auth.token, new_state}
@@ -82,10 +78,7 @@ defmodule GSS.Registry do
   end
 
   def handle_call(:token, _from, %{auth_module: auth_module} = state) do
-    IO.inspect(state, label: "2. Registry: handle_call token: state")
-    IO.inspect(auth_module, label: "2. Registry: handle_call token: auth_module")
     new_state = Map.put(state, :auth, refresh_token(auth_module))
-    IO.inspect(new_state, label: "2. Registry: handle_call token: new_state")
     {:reply, new_state.auth.token, new_state}
   end
 
