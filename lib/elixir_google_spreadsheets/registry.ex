@@ -18,10 +18,11 @@ defmodule GSS.Registry do
   """
   @type state :: map()
 
-  @spec start_link(any()) :: {:ok, pid}
-  def start_link(_args \\ []) do
+  @spec start_link(keyword()) :: {:ok, pid}
+  def start_link(args) do
     initial_state = %{
-      active_sheets: %{}
+      active_sheets: %{},
+      auth_module: args[:auth_module]
     }
 
     GenServer.start_link(__MODULE__, initial_state, name: __MODULE__)
@@ -64,19 +65,20 @@ defmodule GSS.Registry do
           auth: %{
             token: token,
             expires: expires
-          }
+          },
+          auth_module: auth_module
         } = state
       ) do
     if expires < :os.system_time(:seconds) do
-      new_state = Map.put(state, :auth, refresh_token())
+      new_state = Map.put(state, :auth, refresh_token(auth_module))
       {:reply, new_state.auth.token, new_state}
     else
       {:reply, token, state}
     end
   end
 
-  def handle_call(:token, _from, state) do
-    new_state = Map.put(state, :auth, refresh_token())
+  def handle_call(:token, _from, %{auth_module: auth_module} = state) do
+    new_state = Map.put(state, :auth, refresh_token(auth_module))
     {:reply, new_state.auth.token, new_state}
   end
 
@@ -104,9 +106,9 @@ defmodule GSS.Registry do
     {:reply, Map.get(active_sheets, registry_id, nil), state}
   end
 
-  @spec refresh_token() :: map()
-  defp refresh_token do
-    {:ok, token} = Goth.fetch(GSS.Goth)
+  @spec refresh_token(atom()) :: map()
+  defp refresh_token(auth_module) do
+    {:ok, token} = Goth.fetch(auth_module)
     token
   end
 
