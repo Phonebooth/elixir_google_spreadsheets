@@ -27,8 +27,6 @@ import Config
 # Configuration from the imported file will override the ones defined
 # here (which is why it is important to import them last).
 #
-config :elixir_google_spreadsheets,
-  json: "./config/service_account.json" |> File.read!()
 
 config :elixir_google_spreadsheets,
   max_rows_per_request: 301,

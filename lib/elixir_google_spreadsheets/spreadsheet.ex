@@ -912,6 +912,8 @@ defmodule GSS.Spreadsheet do
     batch_update_query(spreadsheet_id, request_body, options, state)
   end
 
+  def filter_specs(map) when map == %{}, do: %{}
+
   def filter_specs(%{col_idx: col, condition_type: type, user_entered_value: value}) do
     %{
       filterSpecs: [
@@ -922,8 +924,6 @@ defmodule GSS.Spreadsheet do
       ]
     }
   end
-
-  def filter_specs(%{}), do: %{}
 
   def filter_specs(_) do
     raise GSS.InvalidInput,
