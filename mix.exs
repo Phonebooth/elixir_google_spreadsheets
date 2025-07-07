@@ -4,10 +4,10 @@ defmodule GSS.Mixfile do
   def project do
     [
       app: :elixir_google_spreadsheets,
-      version: "0.3.3",
-      elixir: "~> 1.14",
+      version: "0.4.0",
+      elixir: "~> 1.17",
       description: "Elixir library to read and write data of Google Spreadsheets.",
-      docs: [extras: ["README.md"]],
+      docs: [main: "GSS", extras: ["README.md"]],
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       package: package(),
@@ -28,12 +28,10 @@ defmodule GSS.Mixfile do
 
   def application do
     [
-      applications: [
+      extra_applications: [
         :logger,
         :goth,
-        :httpoison,
-        :gen_stage,
-        :poison
+        :gen_stage
       ],
       mod: {GSS, []}
     ]
@@ -42,13 +40,11 @@ defmodule GSS.Mixfile do
   defp deps do
     [
       {:goth, "~> 1.4"},
-      {:hackney, "~> 1.18"},
-      {:httpoison, "~> 2.1"},
       {:gen_stage, "~> 1.2"},
-      {:poison, "~> 5.0"},
-      {:certifi, "~> 2.9"},
+      {:finch, "~> 0.19"},
+      {:jason, "~> 1.4"},
       {:earmark, ">= 0.0.0", only: :dev},
-      {:ex_doc, "~> 0.24", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.37", only: :dev, runtime: false},
       {:logger_file_backend, ">= 0.0.12", only: [:dev, :test]},
       {:dialyxir, "~> 1.1", only: :dev, runtime: false}
     ]

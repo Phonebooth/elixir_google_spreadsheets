@@ -7,6 +7,7 @@ defmodule GSS do
 
   def start(_type, _args) do
     children = [
+      {Finch, name: GSS.Finch},
       {GSS.Registry, [auth_module: config(:goth_module)]},
       {GSS.Spreadsheet.Supervisor, []},
       {GSS.Client.Supervisor, []}

@@ -12,11 +12,14 @@ Check [ecto_gss](https://github.com/Voronchuk/ecto_gss) if you need to integrate
 3. Select your project name as service account and __JSON__ as key format, download the created key and rename it to __service_account.json__.
 4. Press __Manage service accounts__ on a credential page, copy your __Service Account Identifier__: _[projectname]@[domain].iam.gserviceaccount.com_
 5. Create or open existing __Google Spreadsheet document__ on your __Google Drive__ and add __Service Account Identifier__ as user invited in spreadsheet's __Collaboration Settings__.
-6. Add `{:elixir_google_spreadsheets, "~> 0.3"}` to __mix.exs__ under `deps` function, add `:elixir_google_spreadsheets` in your application list.
+6. Add `{:elixir_google_spreadsheets, "~> 0.4"}` to __mix.exs__ under `deps` function, add `:elixir_google_spreadsheets` in your application list.
 7. Add __service_account.json__ in your `config.exs` or other config file, like `dev.exs` or `prod.secret.exs`.
     config :elixir_google_spreadsheets,
         json: "./config/service_account.json" |> File.read!
 8. Run `mix deps.get && mix deps.compile`.
+
+## Testing
+The [following Google Spreadsheet](https://docs.google.com/spreadsheets/d/1h85keViqbRzgTN245gEw5s9roxpaUtT7i-mNXQtT8qQ/edit?usp=sharing) is used to run tests locally, it can be copied to run local tests.
 
 ## API limits
 All Google API limits, suggested params are the following:
@@ -27,28 +30,8 @@ config :elixir_google_spreadsheets, :client,
   max_demand: 100,
   max_interval: :timer.minutes(1),
   interval: 100,
-  result_timeout: :timer.minutes(10)
-```
-
-Since elixir 1.14 the following request params are used by default, you can modify them as `:request_opts`:
-
-```elixir
-  [
-    timeout: :timer.seconds(8),
-    recv_timeout: :timer.seconds(5),
-    ssl: [
-      versions: [:"tlsv1.2"],
-      verify: :verify_peer,
-      depth: 99,
-      cacerts: :certifi.cacerts(),
-      customize_hostname_check: [
-        match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
-      ],
-      reuse_sessions: false,
-      crl_check: true,
-      crl_cache: {:ssl_crl_cache, {:internal, [http: 30000]}}
-    ]
-  ]
+  result_timeout: :timer.minutes(10),
+  request_opts: [] # See Finch request options
 ```
 
 # Usage
@@ -72,9 +55,9 @@ Sample operations:
 * `GSS.Spreadsheet.id(pid)`
 * `GSS.Spreadsheet.properties(pid)`
 * `GSS.Spreadsheet.get_sheet_id(pid)`
-* `GSS.Spreadsheet.add_sheet_id_to_state(pid)`
 * `GSS.Spreadsheet.sheets(pid)`
 * `GSS.Spreadsheet.rows(pid)`
+* `GSS.Spreadsheet.update_sheet_size(pid, 10, 5)`
 * `GSS.Spreadsheet.read_row(pid, 1, column_to: 5)`
 * `GSS.Spreadsheet.read_rows(pid, 1, 10, column_to: 5, pad_empty: true)`
 * `GSS.Spreadsheet.read_rows(pid, [1, 3, 5], column_to: 5, pad_empty: true)`
